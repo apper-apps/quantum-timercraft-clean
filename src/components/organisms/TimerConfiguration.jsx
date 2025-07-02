@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import ApperIcon from "@/components/ApperIcon";
 import FormField from "@/components/molecules/FormField";
-
+import templateService from "@/services/templateService";
 const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplateSelect }) => {
   const fontOptions = [
     { value: 'Arial, sans-serif', label: 'Arial' },
@@ -73,56 +73,23 @@ const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplate
     }
   ];
 
-  const templates = [
-    {
-      id: 'compact',
-      name: 'Compact',
-      description: 'Hours and minutes only',
-      icon: 'Clock',
-      preview: 'HH:MM',
-      config: {
-        showDays: false,
-        showHours: true,
-        showMinutes: true,
-        showSeconds: false,
-        fontSize: 20,
-        padding: 12,
-        borderRadius: 8,
+const [templates, setTemplates] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadTemplates = async () => {
+      try {
+        const templateData = await templateService.getTemplates();
+        setTemplates(templateData);
+      } catch (error) {
+        console.error('Error loading templates:', error);
+      } finally {
+        setLoading(false);
       }
-    },
-    {
-      id: 'standard',
-      name: 'Standard',
-      description: 'Days, hours, and minutes',
-      icon: 'Calendar',
-      preview: 'DD:HH:MM',
-      config: {
-        showDays: true,
-        showHours: true,
-        showMinutes: true,
-        showSeconds: false,
-        fontSize: 24,
-        padding: 20,
-        borderRadius: 12,
-      }
-    },
-    {
-      id: 'expanded',
-      name: 'Expanded',
-      description: 'Full countdown with seconds',
-      icon: 'Timer',
-      preview: 'DD:HH:MM:SS',
-      config: {
-        showDays: true,
-        showHours: true,
-        showMinutes: true,
-        showSeconds: true,
-        fontSize: 28,
-        padding: 24,
-        borderRadius: 16,
-      }
-    }
-  ];
+    };
+
+    loadTemplates();
+  }, []);
 
   const formatDateTimeLocal = (date) => {
     if (!date) return '';
@@ -170,64 +137,149 @@ const handleTemplateClick = (template) => {
           Choose Template
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {templates.map((template) => (
-            <motion.div
-              key={template.id}
-              className={`
-                relative cursor-pointer rounded-lg border-2 p-4 transition-all duration-200
-                ${selectedTemplate === template.id 
-                  ? 'border-primary-500 bg-primary-50' 
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
-                }
-              `}
-              onClick={() => handleTemplateClick(template)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {/* Template Header */}
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`
-                  w-8 h-8 rounded-lg flex items-center justify-center
+{loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-gray-200 rounded-lg h-32"></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {templates.map((template) => (
+              <motion.div
+                key={template.id}
+                className={`
+                  relative cursor-pointer rounded-xl border-2 p-5 transition-all duration-300
                   ${selectedTemplate === template.id 
-                    ? 'bg-primary-500 text-white' 
-                    : 'bg-gray-100 text-gray-600'
+                    ? 'border-primary-500 bg-primary-50 shadow-lg' 
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
                   }
-                `}>
-                  <ApperIcon name={template.icon} size={16} />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-800">{template.name}</h3>
-                  <p className="text-xs text-gray-500">{template.description}</p>
-                </div>
-              </div>
-
-              {/* Template Preview */}
-              <div className="bg-gray-50 rounded-md p-3 mb-3">
-                <div className="text-center">
-                  <div className="text-lg font-mono font-bold text-gray-700 mb-1">
-                    {template.preview}
+                `}
+                onClick={() => handleTemplateClick(template)}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {/* Template Header */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`
+                    w-10 h-10 rounded-xl flex items-center justify-center transition-colors
+                    ${selectedTemplate === template.id 
+                      ? 'bg-primary-500 text-white' 
+                      : 'text-gray-600'
+                    }
+                  `}
+                  style={{
+                    backgroundColor: selectedTemplate === template.id 
+                      ? template.colors?.primary || '#3B82F6'
+                      : template.colors?.accent || '#F3F4F6'
+                  }}>
+                    <ApperIcon name={template.icon} size={18} />
                   </div>
-                  <div className="text-xs text-gray-500">
-                    Format Preview
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-gray-800">{template.name}</h3>
+                      {template.featured && (
+                        <span className="px-2 py-1 text-xs font-medium bg-amber-100 text-amber-800 rounded-full">
+                          Popular
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">{template.description}</p>
+                    <p className="text-xs text-primary-600 font-medium mt-1">{template.category}</p>
                   </div>
                 </div>
-              </div>
 
-              {/* Selection Indicator */}
-              {selectedTemplate === template.id && (
-                <motion.div 
-                  className="absolute top-2 right-2 w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.2 }}
+                {/* Color Palette Preview */}
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex gap-1">
+                    <div 
+                      className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
+                      style={{ backgroundColor: template.colors?.primary || '#000000' }}
+                    ></div>
+                    <div 
+                      className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
+                      style={{ backgroundColor: template.colors?.secondary || '#666666' }}
+                    ></div>
+                    <div 
+                      className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
+                      style={{ backgroundColor: template.colors?.background || '#FFFFFF' }}
+                    ></div>
+                    <div 
+                      className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
+                      style={{ backgroundColor: template.colors?.accent || '#F5F5F5' }}
+                    ></div>
+                  </div>
+                  <span className="text-xs text-gray-500 ml-2">Color Scheme</span>
+                </div>
+
+                {/* Template Preview */}
+                <div 
+                  className="rounded-lg p-4 mb-4 border"
+                  style={{
+                    backgroundColor: template.colors?.background || '#FFFFFF',
+                    borderColor: template.colors?.accent || '#E5E7EB',
+                    background: template.style?.background || template.colors?.background || '#FFFFFF'
+                  }}
                 >
-                  <ApperIcon name="Check" size={14} className="text-white" />
-                </motion.div>
-              )}
-            </motion.div>
-          ))}
-        </div>
+                  <div className="text-center">
+                    <div 
+                      className="text-lg font-bold mb-1"
+                      style={{
+                        color: template.colors?.primary || '#000000',
+                        fontFamily: template.config?.fontFamily || 'Arial, sans-serif',
+                        textShadow: template.style?.textShadow || 'none',
+                        letterSpacing: template.config?.letterSpacing || 'normal'
+                      }}
+                    >
+                      {template.preview}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Live Preview
+                    </div>
+                  </div>
+                </div>
+
+                {/* Font & Style Info */}
+                <div className="text-xs text-gray-600 space-y-1">
+                  <div className="flex justify-between">
+                    <span>Font:</span>
+                    <span className="font-medium">{template.config?.fontFamily?.split(',')[0] || 'Arial'}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Size:</span>
+                    <span className="font-medium">{template.config?.fontSize || 24}px</span>
+                  </div>
+                </div>
+
+                {/* Selection Indicator */}
+                {selectedTemplate === template.id && (
+                  <motion.div 
+                    className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center shadow-lg"
+                    style={{ 
+                      backgroundColor: template.colors?.primary || '#3B82F6',
+                      color: template.colors?.background || '#FFFFFF'
+                    }}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.2, type: 'spring' }}
+                  >
+                    <ApperIcon name="Check" size={16} />
+                  </motion.div>
+                )}
+
+                {/* Hover Effect Overlay */}
+                <div className={`
+                  absolute inset-0 rounded-xl transition-opacity duration-200
+                  ${selectedTemplate === template.id ? 'opacity-0' : 'opacity-0 hover:opacity-5'}
+                `}
+                style={{ backgroundColor: template.colors?.primary || '#3B82F6' }}
+                ></div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
 {/* Timer Settings */}
       <div className="premium-card rounded-xl p-6">

@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import TimerPreview from "@/components/organisms/TimerPreview";
 import TimerConfiguration from "@/components/organisms/TimerConfiguration";
 import Header from "@/components/organisms/Header";
+import templateService from "@/services/templateService";
 
 const TimerBuilder = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState('standard');
+  const [selectedTemplate, setSelectedTemplate] = useState('minimalist');
   const [config, setConfig] = useState({
     eventName: 'Special Event',
     targetDate: '',
