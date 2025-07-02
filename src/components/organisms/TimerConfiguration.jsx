@@ -1,17 +1,68 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import FormField from '@/components/molecules/FormField';
+import ApperIcon from '@/components/ApperIcon';
 
-const TimerConfiguration = ({ config, updateConfig }) => {
+const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplateSelect }) => {
   const fontOptions = [
     { value: 'Arial, sans-serif', label: 'Arial' },
     { value: 'Georgia, serif', label: 'Georgia' },
     { value: 'Times New Roman, serif', label: 'Times New Roman' },
     { value: 'Helvetica, sans-serif', label: 'Helvetica' },
     { value: 'Courier New, monospace', label: 'Courier New' },
-    { value: 'Verdana, sans-serif', label: 'Verdana' },
     { value: 'Roboto, sans-serif', label: 'Roboto' },
     { value: 'Open Sans, sans-serif', label: 'Open Sans' },
+  ];
+
+  const templates = [
+    {
+      id: 'compact',
+      name: 'Compact',
+      description: 'Hours and minutes only',
+      icon: 'Clock',
+      preview: 'HH:MM',
+      config: {
+        showDays: false,
+        showHours: true,
+        showMinutes: true,
+        showSeconds: false,
+        fontSize: 20,
+        padding: 12,
+        borderRadius: 8,
+      }
+    },
+    {
+      id: 'standard',
+      name: 'Standard',
+      description: 'Days, hours, and minutes',
+      icon: 'Calendar',
+      preview: 'DD:HH:MM',
+      config: {
+        showDays: true,
+        showHours: true,
+        showMinutes: true,
+        showSeconds: false,
+        fontSize: 24,
+        padding: 20,
+        borderRadius: 12,
+      }
+    },
+    {
+      id: 'expanded',
+      name: 'Expanded',
+      description: 'Full countdown with seconds',
+      icon: 'Timer',
+      preview: 'DD:HH:MM:SS',
+      config: {
+        showDays: true,
+        showHours: true,
+        showMinutes: true,
+        showSeconds: true,
+        fontSize: 28,
+        padding: 24,
+        borderRadius: 16,
+      }
+    }
   ];
 
   const formatDateTimeLocal = (date) => {
@@ -24,6 +75,14 @@ const TimerConfiguration = ({ config, updateConfig }) => {
     updateConfig('targetDate', value);
   };
 
+  const handleTemplateClick = (template) => {
+    onTemplateSelect(template.id);
+    // Apply template configuration
+    Object.entries(template.config).forEach(([key, value]) => {
+      updateConfig(key, value);
+    });
+  };
+
   return (
     <motion.div 
       className="space-y-6"
@@ -31,7 +90,75 @@ const TimerConfiguration = ({ config, updateConfig }) => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5 }}
     >
+      {/* Template Gallery */}
       <div className="premium-card rounded-xl p-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+          <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">0</span>
+          </div>
+          Choose Template
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {templates.map((template) => (
+            <motion.div
+              key={template.id}
+              className={`
+                relative cursor-pointer rounded-lg border-2 p-4 transition-all duration-200
+                ${selectedTemplate === template.id 
+                  ? 'border-primary-500 bg-primary-50' 
+                  : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
+                }
+              `}
+              onClick={() => handleTemplateClick(template)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {/* Template Header */}
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`
+                  w-8 h-8 rounded-lg flex items-center justify-center
+                  ${selectedTemplate === template.id 
+                    ? 'bg-primary-500 text-white' 
+                    : 'bg-gray-100 text-gray-600'
+                  }
+                `}>
+                  <ApperIcon name={template.icon} size={16} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">{template.name}</h3>
+                  <p className="text-xs text-gray-500">{template.description}</p>
+                </div>
+              </div>
+
+              {/* Template Preview */}
+              <div className="bg-gray-50 rounded-md p-3 mb-3">
+                <div className="text-center">
+                  <div className="text-lg font-mono font-bold text-gray-700 mb-1">
+                    {template.preview}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Format Preview
+                  </div>
+                </div>
+              </div>
+
+              {/* Selection Indicator */}
+              {selectedTemplate === template.id && (
+                <motion.div 
+                  className="absolute top-2 right-2 w-6 h-6 bg-primary-500 rounded-full flex items-center justify-center"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ApperIcon name="Check" size={14} className="text-white" />
+                </motion.div>
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+<div className="premium-card rounded-xl p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
           <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">1</span>
@@ -57,7 +184,7 @@ const TimerConfiguration = ({ config, updateConfig }) => {
         </div>
       </div>
 
-      <div className="premium-card rounded-xl p-6">
+<div className="premium-card rounded-xl p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
           <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">2</span>
@@ -93,7 +220,7 @@ const TimerConfiguration = ({ config, updateConfig }) => {
         </div>
       </div>
 
-      <div className="premium-card rounded-xl p-6">
+<div className="premium-card rounded-xl p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
           <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">3</span>
