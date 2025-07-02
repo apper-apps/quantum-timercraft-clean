@@ -207,11 +207,10 @@ const templates = [
     },
     style: {
       borderStyle: 'none',
-      boxShadow: '0 8px 32px rgba(236, 72, 153, 0.2)',
-background: 'linear-gradient(135deg, #FFFFFF 0%, #F3E8FF 100%)',
+boxShadow: '0 8px 32px rgba(236, 72, 153, 0.2)',
+      background: 'linear-gradient(135deg, #FFFFFF 0%, #F3E8FF 100%)',
       textBackground: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)'
     }
-  }
   },
   {
     id: 'flip-clock',
