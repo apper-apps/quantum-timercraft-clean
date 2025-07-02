@@ -44,7 +44,57 @@ const TimerDisplay = ({ config }) => {
     borderRadius: `${config.borderRadius}px`,
   };
 
-  const TimerUnit = ({ value, label, show }) => {
+const AnimatedNumber = ({ value, animationType }) => {
+    const animationVariants = {
+      fade: {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 },
+        transition: { duration: 0.3 }
+      },
+      slide: {
+        initial: { y: 20, opacity: 0 },
+        animate: { y: 0, opacity: 1 },
+        exit: { y: -20, opacity: 0 },
+        transition: { duration: 0.4, ease: "easeOut" }
+      },
+      bounce: {
+        initial: { scale: 0.8, opacity: 0 },
+        animate: { scale: 1, opacity: 1 },
+        exit: { scale: 0.8, opacity: 0 },
+        transition: { duration: 0.5, type: "spring", bounce: 0.4 }
+      },
+      scale: {
+        initial: { scale: 0, opacity: 0 },
+        animate: { scale: 1, opacity: 1 },
+        exit: { scale: 0, opacity: 0 },
+        transition: { duration: 0.3, ease: "easeOut" }
+      },
+      flip: {
+        initial: { rotateY: 90, opacity: 0 },
+        animate: { rotateY: 0, opacity: 1 },
+        exit: { rotateY: -90, opacity: 0 },
+        transition: { duration: 0.4 }
+      }
+    };
+
+    const variant = animationVariants[animationType] || animationVariants.fade;
+
+    return (
+      <motion.div
+        key={value}
+        className="text-2xl font-bold tabular-nums"
+        initial={variant.initial}
+        animate={variant.animate}
+        exit={variant.exit}
+        transition={variant.transition}
+      >
+        {String(value).padStart(2, '0')}
+      </motion.div>
+    );
+  };
+
+  const TimerUnit = ({ value, label, show, animationType }) => {
     if (!show) return null;
     
     return (
@@ -53,9 +103,7 @@ const TimerDisplay = ({ config }) => {
         whileHover={{ scale: 1.05 }}
         transition={{ type: 'spring', stiffness: 300 }}
       >
-        <div className="text-2xl font-bold tabular-nums">
-          {String(value).padStart(2, '0')}
-        </div>
+        <AnimatedNumber value={value} animationType={animationType} />
         <div className="text-xs uppercase tracking-wide opacity-75 mt-1">
           {label}
         </div>
@@ -85,26 +133,30 @@ const TimerDisplay = ({ config }) => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <div className="flex items-center justify-center gap-4 flex-wrap">
+<div className="flex items-center justify-center gap-4 flex-wrap">
           <TimerUnit 
             value={timeLeft.days} 
             label="Days" 
-            show={config.showDays} 
+            show={config.showDays}
+            animationType={config.animationType}
           />
           <TimerUnit 
             value={timeLeft.hours} 
             label="Hours" 
-            show={config.showHours} 
+            show={config.showHours}
+            animationType={config.animationType}
           />
           <TimerUnit 
             value={timeLeft.minutes} 
             label="Minutes" 
-            show={config.showMinutes} 
+            show={config.showMinutes}
+            animationType={config.animationType}
           />
           <TimerUnit 
             value={timeLeft.seconds} 
             label="Seconds" 
-            show={config.showSeconds} 
+            show={config.showSeconds}
+            animationType={config.animationType}
           />
         </div>
       </motion.div>

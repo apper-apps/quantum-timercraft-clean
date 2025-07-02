@@ -15,10 +15,11 @@ const TimerBuilder = () => {
     fontFamily: 'Arial, sans-serif',
     padding: 20,
     borderRadius: 12,
-    showDays: true,
+showDays: true,
     showHours: true,
     showMinutes: true,
     showSeconds: true,
+    animationType: 'fade',
   });
   // Set default target date to 7 days from now
   useEffect(() => {

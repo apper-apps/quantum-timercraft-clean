@@ -273,11 +273,25 @@ const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplate
               label="Border Radius (px)"
               type="number"
               value={config.borderRadius}
-              onChange={(e) => updateConfig('borderRadius', parseInt(e.target.value) || 0)}
+onChange={(e) => updateConfig('borderRadius', parseInt(e.target.value) || 0)}
               min="0"
               max="50"
             />
           </div>
+          
+          <FormField
+            type="select"
+            label="Number Animation"
+            value={config.animationType}
+            onChange={(e) => updateConfig('animationType', e.target.value)}
+            options={[
+              { value: 'fade', label: 'Fade' },
+              { value: 'slide', label: 'Slide Up' },
+              { value: 'bounce', label: 'Bounce' },
+              { value: 'scale', label: 'Scale' },
+              { value: 'flip', label: 'Flip' }
+            ]}
+          />
         </div>
       </div>
     </motion.div>
