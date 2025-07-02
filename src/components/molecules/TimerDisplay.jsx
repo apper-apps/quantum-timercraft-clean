@@ -1,5 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+
+// Custom hook to track previous values
+const usePrevious = (value) => {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
 
 const TimerDisplay = ({ config }) => {
   const [timeLeft, setTimeLeft] = useState({
@@ -45,6 +54,9 @@ const TimerDisplay = ({ config }) => {
   };
 
 const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
+    const previousValue = usePrevious(value);
+    const hasValueChanged = previousValue !== undefined && previousValue !== value;
+    
     const animationVariants = {
       fade: {
         initial: { opacity: 0 },
@@ -80,8 +92,11 @@ const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
 
     const variant = animationVariants[animationType] || animationVariants.fade;
 
-    // If animation is disabled, render static content
-    if (!shouldAnimate) {
+    // Only animate if the value has actually changed and animation is enabled
+    const shouldShowAnimation = shouldAnimate && hasValueChanged;
+
+    // If no animation should occur, render static content
+    if (!shouldShowAnimation) {
       return (
         <div className="text-2xl font-bold tabular-nums">
           {String(value).padStart(2, '0')}
@@ -112,10 +127,10 @@ const TimerUnit = ({ value, label, show, animationType }) => {
         whileHover={{ scale: 1.05 }}
         transition={{ type: 'spring', stiffness: 300 }}
       >
-        <AnimatedNumber 
+<AnimatedNumber 
           value={value} 
           animationType={animationType} 
-          shouldAnimate={show} 
+          shouldAnimate={true}
         />
         <div className="text-xs uppercase tracking-wide opacity-75 mt-1">
           {label}
