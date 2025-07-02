@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+
 // Custom hook to track previous values
 const usePrevious = (value) => {
   const ref = useRef();
@@ -16,6 +17,9 @@ const TimerDisplay = ({ config }) => {
     minutes: 0,
     seconds: 0
   });
+
+  // Track previous time values to detect changes
+  const previousTimeLeft = usePrevious(timeLeft);
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -53,9 +57,6 @@ const TimerDisplay = ({ config }) => {
   };
 
 const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
-    const previousValue = usePrevious(value);
-    const hasValueChanged = previousValue !== undefined && previousValue !== value;
-    
     const animationVariants = {
       fade: {
         initial: { opacity: 0 },
@@ -91,7 +92,7 @@ const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
 
     const variant = animationVariants[animationType] || animationVariants.fade;
 
-    // Always animate when shouldAnimate is true - this ensures animations work
+    // Only animate when shouldAnimate is true
     if (!shouldAnimate) {
       return (
         <div className="text-2xl font-bold tabular-nums">
@@ -116,7 +117,7 @@ const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
     );
   };
 
-const TimerUnit = ({ value, label, show, animationType }) => {
+const TimerUnit = ({ value, label, show, animationType, shouldAnimate = true }) => {
     if (!show) return null;
     
     return (
@@ -125,10 +126,10 @@ const TimerUnit = ({ value, label, show, animationType }) => {
         whileHover={{ scale: 1.05 }}
         transition={{ type: 'spring', stiffness: 300 }}
       >
-<AnimatedNumber 
+        <AnimatedNumber 
           value={value} 
           animationType={animationType} 
-          shouldAnimate={true}
+          shouldAnimate={shouldAnimate}
         />
         <div className="text-xs uppercase tracking-wide opacity-75 mt-1">
           {label}
@@ -136,6 +137,12 @@ const TimerUnit = ({ value, label, show, animationType }) => {
       </motion.div>
     );
   };
+
+// Determine which units should animate based on value changes
+  const shouldAnimateDays = previousTimeLeft ? previousTimeLeft.days !== timeLeft.days : false;
+  const shouldAnimateHours = previousTimeLeft ? previousTimeLeft.hours !== timeLeft.hours : false;
+  const shouldAnimateMinutes = previousTimeLeft ? previousTimeLeft.minutes !== timeLeft.minutes : false;
+  const shouldAnimateSeconds = previousTimeLeft ? previousTimeLeft.seconds !== timeLeft.seconds : false;
 
   return (
     <div className="w-full max-w-lg mx-auto">
@@ -159,30 +166,34 @@ const TimerUnit = ({ value, label, show, animationType }) => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-<div className="flex items-center justify-center gap-4 flex-wrap">
+        <div className="flex items-center justify-center gap-4 flex-wrap">
           <TimerUnit 
             value={timeLeft.days} 
             label="Days" 
             show={config.showDays}
             animationType={config.animationType}
+            shouldAnimate={shouldAnimateDays}
           />
           <TimerUnit 
             value={timeLeft.hours} 
             label="Hours" 
             show={config.showHours}
             animationType={config.animationType}
+            shouldAnimate={shouldAnimateHours}
           />
           <TimerUnit 
             value={timeLeft.minutes} 
             label="Minutes" 
             show={config.showMinutes}
             animationType={config.animationType}
+            shouldAnimate={shouldAnimateMinutes}
           />
           <TimerUnit 
             value={timeLeft.seconds} 
             label="Seconds" 
             show={config.showSeconds}
             animationType={config.animationType}
+            shouldAnimate={shouldAnimateSeconds}
           />
         </div>
       </motion.div>
