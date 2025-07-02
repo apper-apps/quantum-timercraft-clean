@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 // Custom hook to track previous values
 const usePrevious = (value) => {
@@ -47,15 +47,21 @@ const TimerDisplay = ({ config }) => {
     return () => clearInterval(timer);
   }, [config.targetDate]);
 
-  const timerStyle = {
+const timerStyle = {
     color: config.textColor,
     backgroundColor: config.backgroundColor,
     fontSize: `${config.fontSize}px`,
     fontFamily: config.fontFamily,
     padding: `${config.padding}px`,
     borderRadius: `${config.borderRadius}px`,
+    boxShadow: config.boxShadow || 'none',
+    border: config.border || 'none',
+    textShadow: config.textShadow || 'none',
+    transition: 'all 0.3s ease',
   };
 
+  // Apply style preset class if selected
+  const stylePresetClass = config.stylePreset ? `timer-style-${config.stylePreset}` : '';
 const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
     const animationVariants = {
       fade: {
@@ -146,58 +152,75 @@ const TimerUnit = ({ value, label, show, animationType, shouldAnimate = true }) 
 
   return (
     <div className="w-full max-w-lg mx-auto">
-      {config.eventName && (
-        <motion.div 
-          className="text-center mb-6"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h3 className="text-xl font-semibold text-gray-800">
+    {config.eventName && <motion.div
+        className="text-center mb-6"
+        initial={{
+            opacity: 0,
+            y: -20
+        }}
+        animate={{
+            opacity: 1,
+            y: 0
+        }}
+        transition={{
+            duration: 0.5
+        }}>
+        <h3 className="text-xl font-semibold text-gray-800">
             {config.eventName}
-          </h3>
-        </motion.div>
-      )}
-      
-      <motion.div 
+        </h3>
+    </motion.div>}
+    <motion.div
         className="rounded-xl p-6 shadow-medium"
         style={timerStyle}
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
+        initial={{
+            opacity: 0,
+            scale: 0.9
+        }}
+        animate={{
+            opacity: 1,
+            scale: 1
+        }}
+        transition={{
+            duration: 0.5,
+            delay: 0.2
+        }}>
         <div className="flex items-center justify-center gap-4 flex-wrap">
-          <TimerUnit 
-            value={timeLeft.days} 
-            label="Days" 
-            show={config.showDays}
-            animationType={config.animationType}
-            shouldAnimate={shouldAnimateDays}
-          />
-          <TimerUnit 
-            value={timeLeft.hours} 
-            label="Hours" 
-            show={config.showHours}
-            animationType={config.animationType}
-            shouldAnimate={shouldAnimateHours}
-          />
-          <TimerUnit 
-            value={timeLeft.minutes} 
-            label="Minutes" 
-            show={config.showMinutes}
-            animationType={config.animationType}
-            shouldAnimate={shouldAnimateMinutes}
-          />
-          <TimerUnit 
-            value={timeLeft.seconds} 
-            label="Seconds" 
-            show={config.showSeconds}
-            animationType={config.animationType}
-            shouldAnimate={shouldAnimateSeconds}
-          />
-        </div>
-      </motion.div>
-    </div>
+            <TimerUnit
+                value={timeLeft.days}
+                label="Days"
+                show={config.showDays}
+                animationType={config.animationType}
+                shouldAnimate={shouldAnimateDays} />
+            <motion.div
+                className={`rounded-xl p-6 shadow-medium ${stylePresetClass}`}
+                style={timerStyle}
+                initial={{
+                    opacity: 0,
+                    scale: 0.9
+                }}
+                animate={{
+                    opacity: 1,
+                    scale: 1
+                }}
+                transition={{
+                    duration: 0.5,
+                    delay: 0.2
+                }}>
+                <TimerUnit
+                    value={timeLeft.minutes}
+                    label="Minutes"
+                    show={config.showMinutes}
+                    animationType={config.animationType}
+                    shouldAnimate={shouldAnimateMinutes} />
+                <TimerUnit
+                    value={timeLeft.seconds}
+                    label="Seconds"
+                    show={config.showSeconds}
+                    animationType={config.animationType}
+                    shouldAnimate={shouldAnimateSeconds} />
+            </motion.div></div>
+    </motion.div>
+</div>
   );
 };
 

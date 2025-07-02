@@ -119,6 +119,64 @@ const handleTemplateClick = (template) => {
         updateConfig(key, value);
       });
     }
+};
+
+  const handleStyleChange = (styleId) => {
+    updateConfig('stylePreset', styleId);
+    
+    // Define style configurations
+    const styleConfigs = {
+      modern: {
+        textColor: '#ffffff',
+        backgroundColor: 'transparent',
+        boxShadow: '0 10px 30px rgba(102, 126, 234, 0.4)',
+        border: 'none',
+        textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+      },
+      classic: {
+        textColor: '#333333',
+        backgroundColor: 'transparent',
+        boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+        border: '2px solid #e0e0e0',
+        textShadow: '0 1px 2px rgba(255, 255, 255, 0.8)'
+      },
+      neon: {
+        textColor: '#00ffff',
+        backgroundColor: 'transparent',
+        boxShadow: '0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3)',
+        border: '1px solid #00ffff',
+        textShadow: '0 0 10px rgba(0, 255, 255, 0.8)'
+      },
+      minimal: {
+        textColor: '#2d3748',
+        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.05)',
+        border: '1px solid rgba(0, 0, 0, 0.08)',
+        textShadow: 'none'
+      },
+      elegant: {
+        textColor: '#f7fafc',
+        backgroundColor: 'transparent',
+        boxShadow: '0 15px 35px rgba(30, 60, 114, 0.4)',
+        border: '1px solid rgba(247, 250, 252, 0.2)',
+        textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
+      },
+      bold: {
+        textColor: '#ffffff',
+        backgroundColor: 'transparent',
+        boxShadow: '0 8px 25px rgba(255, 107, 107, 0.4)',
+        border: 'none',
+        textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+      }
+    };
+
+    // Apply style configuration
+    const selectedStyle = styleConfigs[styleId];
+    if (selectedStyle) {
+      Object.entries(selectedStyle).forEach(([key, value]) => {
+        updateConfig(key, value);
+      });
+    }
   };
 
   return (
@@ -362,6 +420,103 @@ const handleTemplateClick = (template) => {
           options={timerFormatOptions}
           renderOption={true}
         />
+</div>
+
+      {/* Timer Styles */}
+      <div className="premium-card rounded-xl p-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+          <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">2.7</span>
+          </div>
+          Timer Styles
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            {
+              id: 'modern',
+              name: 'Modern',
+              description: 'Gradient background with vibrant colors',
+              preview: '12:34:56',
+              className: 'timer-style-modern'
+            },
+            {
+              id: 'classic',
+              name: 'Classic',
+              description: 'Clean and professional appearance',
+              preview: '12:34:56',
+              className: 'timer-style-classic'
+            },
+            {
+              id: 'neon',
+              name: 'Neon',
+              description: 'Cyberpunk-inspired glowing effect',
+              preview: '12:34:56',
+              className: 'timer-style-neon'
+            },
+            {
+              id: 'minimal',
+              name: 'Minimal',
+              description: 'Simple and clean design',
+              preview: '12:34:56',
+              className: 'timer-style-minimal'
+            },
+            {
+              id: 'elegant',
+              name: 'Elegant',
+              description: 'Sophisticated blue gradient',
+              preview: '12:34:56',
+              className: 'timer-style-elegant'
+            },
+            {
+              id: 'bold',
+              name: 'Bold',
+              description: 'Eye-catching red gradient',
+              preview: '12:34:56',
+              className: 'timer-style-bold'
+            }
+          ].map((style) => (
+            <motion.div
+              key={style.id}
+              className={`
+                relative cursor-pointer rounded-xl border-2 p-4 transition-all duration-300
+                ${config.stylePreset === style.id 
+                  ? 'border-primary-500 bg-primary-50 shadow-lg' 
+                  : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
+                }
+              `}
+              onClick={() => handleStyleChange(style.id)}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="text-center mb-3">
+                <h3 className="font-semibold text-gray-800 mb-1">{style.name}</h3>
+                <p className="text-xs text-gray-500">{style.description}</p>
+              </div>
+              
+              <div className="flex justify-center mb-3">
+                <div className={`
+                  ${style.className} 
+                  text-sm font-bold px-3 py-2 rounded-lg
+                  transition-all duration-300
+                `}>
+                  {style.preview}
+                </div>
+              </div>
+
+              {config.stylePreset === style.id && (
+                <motion.div 
+                  className="absolute top-2 right-2 w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center shadow-lg"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.2, type: 'spring' }}
+                >
+                  <ApperIcon name="Check" size={12} />
+                </motion.div>
+              )}
+            </motion.div>
+          ))}
+        </div>
       </div>
 
 {/* Style Customization */}
