@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import FormField from '@/components/molecules/FormField';
-import ApperIcon from '@/components/ApperIcon';
+import React from "react";
+import { motion } from "framer-motion";
+import ApperIcon from "@/components/ApperIcon";
+import FormField from "@/components/molecules/FormField";
 
 const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplateSelect }) => {
   const fontOptions = [
@@ -12,6 +12,65 @@ const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplate
     { value: 'Courier New, monospace', label: 'Courier New' },
     { value: 'Roboto, sans-serif', label: 'Roboto' },
     { value: 'Open Sans, sans-serif', label: 'Open Sans' },
+];
+
+  const timerFormatOptions = [
+    {
+      value: 'minimal',
+      label: 'Minimal',
+      example: '15:30',
+      description: 'Hours and minutes only',
+      config: { showDays: false, showHours: true, showMinutes: true, showSeconds: false }
+    },
+    {
+      value: 'standard',
+      label: 'Standard',
+      example: '2:15:30',
+      description: 'Days, hours, and minutes',
+      config: { showDays: true, showHours: true, showMinutes: true, showSeconds: false }
+    },
+    {
+      value: 'detailed',
+      label: 'Detailed',
+      example: '2:15:30:45',
+      description: 'Full countdown with seconds',
+      config: { showDays: true, showHours: true, showMinutes: true, showSeconds: true }
+    },
+    {
+      value: 'hours-only',
+      label: 'Hours Only',
+      example: '63:30',
+      description: 'Hours and minutes (no days)',
+      config: { showDays: false, showHours: true, showMinutes: true, showSeconds: false }
+    },
+    {
+      value: 'compact',
+      label: 'Compact',
+      example: '30:45',
+      description: 'Minutes and seconds only',
+      config: { showDays: false, showHours: false, showMinutes: true, showSeconds: true }
+    },
+    {
+      value: 'days-only',
+      label: 'Days Only',
+      example: '2 Days',
+      description: 'Days counter only',
+      config: { showDays: true, showHours: false, showMinutes: false, showSeconds: false }
+    },
+    {
+      value: 'precision',
+      label: 'High Precision',
+      example: '2d 15h 30m 45s',
+      description: 'All units with labels',
+      config: { showDays: true, showHours: true, showMinutes: true, showSeconds: true }
+    },
+    {
+      value: 'simple',
+      label: 'Simple',
+      example: '15h 30m',
+      description: 'Hours and minutes with labels',
+      config: { showDays: false, showHours: true, showMinutes: true, showSeconds: false }
+    }
   ];
 
   const templates = [
@@ -75,12 +134,24 @@ const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplate
     updateConfig('targetDate', value);
   };
 
-  const handleTemplateClick = (template) => {
+const handleTemplateClick = (template) => {
     onTemplateSelect(template.id);
     // Apply template configuration
     Object.entries(template.config).forEach(([key, value]) => {
       updateConfig(key, value);
     });
+  };
+
+  const handleFormatChange = (formatValue) => {
+    updateConfig('timerFormat', formatValue);
+    
+    // Find the selected format and apply its configuration
+    const selectedFormat = timerFormatOptions.find(format => format.value === formatValue);
+    if (selectedFormat && selectedFormat.config) {
+      Object.entries(selectedFormat.config).forEach(([key, value]) => {
+        updateConfig(key, value);
+      });
+    }
   };
 
   return (
@@ -158,7 +229,8 @@ const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplate
           ))}
         </div>
       </div>
-<div className="premium-card rounded-xl p-6">
+{/* Timer Settings */}
+      <div className="premium-card rounded-xl p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
           <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">1</span>
@@ -184,7 +256,8 @@ const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplate
         </div>
       </div>
 
-<div className="premium-card rounded-xl p-6">
+{/* Display Options */}
+      <div className="premium-card rounded-xl p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
           <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">2</span>
@@ -220,7 +293,27 @@ const TimerConfiguration = ({ config, updateConfig, selectedTemplate, onTemplate
         </div>
       </div>
 
-<div className="premium-card rounded-xl p-6">
+      {/* Timer Format Section */}
+      <div className="premium-card rounded-xl p-6">
+        <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+          <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">2.5</span>
+          </div>
+          Timer Format
+        </h2>
+        
+        <FormField
+          type="select"
+          label="Display Format"
+          value={config.timerFormat || 'standard'}
+          onChange={(e) => handleFormatChange(e.target.value)}
+          options={timerFormatOptions}
+          renderOption={true}
+        />
+      </div>
+
+{/* Style Customization */}
+      <div className="premium-card rounded-xl p-6">
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
           <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">3</span>
@@ -294,7 +387,7 @@ onChange={(e) => updateConfig('borderRadius', parseInt(e.target.value) || 0)}
           />
         </div>
       </div>
-    </motion.div>
+</motion.div>
   );
 };
 

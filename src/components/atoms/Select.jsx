@@ -11,6 +11,7 @@ const Select = ({
   error,
   className = '',
   required = false,
+  renderOption = false,
   ...props
 }) => {
   const selectClasses = `
@@ -41,9 +42,12 @@ const Select = ({
               {placeholder}
             </option>
           )}
-          {options.map((option, index) => (
+{options.map((option, index) => (
             <option key={index} value={option.value}>
-              {option.label}
+              {renderOption && option.example 
+                ? `${option.label} - ${option.example} (${option.description})`
+                : option.label
+              }
             </option>
           ))}
         </select>
