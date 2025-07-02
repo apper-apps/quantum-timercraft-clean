@@ -12,6 +12,7 @@
 "dependencies": {
 "@reduxjs/toolkit": "2.7.0",
     "apexcharts": "4.7.0",
+    "canvas-confetti": "^3.0.3",
     "copy-to-clipboard": "^3.3.3",
     "date-fns": "4.1.0",
     "framer-motion": "^11.11.17",

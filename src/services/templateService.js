@@ -208,12 +208,162 @@ const templates = [
     style: {
       borderStyle: 'none',
       boxShadow: '0 8px 32px rgba(236, 72, 153, 0.2)',
-      background: 'linear-gradient(135deg, #FFFFFF 0%, #F3E8FF 100%)',
+background: 'linear-gradient(135deg, #FFFFFF 0%, #F3E8FF 100%)',
       textBackground: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)'
     }
   }
+  },
+  {
+    id: 'flip-clock',
+    name: 'Flip Clock',
+    category: 'Digital',
+    description: 'Digital flip-clock style with smooth transitions',
+    icon: 'Timer',
+    featured: true,
+    preview: 'HH:MM:SS',
+    colors: {
+      primary: '#00FF41',
+      secondary: '#008F11',
+      background: '#000000',
+      accent: '#1A1A1A'
+    },
+    config: {
+      showDays: false,
+      showHours: true,
+      showMinutes: true,
+      showSeconds: true,
+      fontSize: 36,
+      fontFamily: 'Courier New, monospace',
+      textColor: '#00FF41',
+      backgroundColor: '#000000',
+      padding: 24,
+      borderRadius: 8,
+      animationType: 'slide',
+      fontWeight: '700',
+      letterSpacing: '0.1em'
+    },
+    style: {
+      borderStyle: 'solid',
+      borderColor: '#00FF41',
+      borderWidth: '2px',
+      boxShadow: '0 0 20px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1)',
+      textShadow: '0 0 10px #00FF41',
+      background: 'linear-gradient(135deg, #000000 0%, #1A1A1A 100%)'
+    }
+  },
+  {
+    id: 'progress-bar',
+    name: 'Progress Bar',
+    category: 'Modern',
+    description: 'Linear progress indicator with gradient styling',
+    icon: 'BarChart3',
+    featured: false,
+    preview: 'DD:HH:MM',
+    colors: {
+      primary: '#FFFFFF',
+      secondary: '#3B82F6',
+      background: '#1E293B',
+      accent: '#64748B'
+    },
+    config: {
+      showDays: true,
+      showHours: true,
+      showMinutes: true,
+      showSeconds: false,
+      fontSize: 28,
+      fontFamily: 'Roboto, sans-serif',
+      textColor: '#FFFFFF',
+      backgroundColor: '#1E293B',
+      padding: 32,
+      borderRadius: 16,
+      animationType: 'scale',
+      fontWeight: '600',
+      letterSpacing: '0.05em'
+    },
+    style: {
+      borderStyle: 'none',
+      boxShadow: '0 8px 32px rgba(59, 130, 246, 0.3)',
+      background: 'linear-gradient(135deg, #1E293B 0%, #334155 50%, #475569 100%)',
+      textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'
+    }
+  },
+  {
+    id: 'circular-countdown',
+    name: 'Circular Countdown',
+    category: 'Modern',
+    description: 'Circular progress design with radial styling',
+    icon: 'Circle',
+    featured: true,
+    preview: 'MM:SS',
+    colors: {
+      primary: '#8B5CF6',
+      secondary: '#A78BFA',
+      background: '#FAFAFA',
+      accent: '#E5E7EB'
+    },
+    config: {
+      showDays: false,
+      showHours: false,
+      showMinutes: true,
+      showSeconds: true,
+      fontSize: 32,
+      fontFamily: 'Inter, sans-serif',
+      textColor: '#8B5CF6',
+      backgroundColor: '#FAFAFA',
+      padding: 40,
+      borderRadius: 50,
+      animationType: 'bounce',
+      fontWeight: '700',
+      letterSpacing: '0.1em'
+    },
+    style: {
+      borderStyle: 'solid',
+      borderColor: '#8B5CF6',
+      borderWidth: '4px',
+      boxShadow: '0 20px 40px rgba(139, 92, 246, 0.2)',
+      background: 'radial-gradient(circle, #FAFAFA 0%, #F3F4F6 100%)',
+      textShadow: '0 2px 4px rgba(139, 92, 246, 0.3)'
+    }
+  },
+  {
+    id: 'confetti-celebration',
+    name: 'Confetti Celebration',
+    category: 'Fun',
+    description: 'Festive party theme with vibrant colors',
+    icon: 'Sparkles',
+    featured: true,
+    preview: 'DD:HH:MM:SS',
+    colors: {
+      primary: '#FF6B6B',
+      secondary: '#4ECDC4',
+      background: '#FFFFFF',
+      accent: '#FFE66D'
+    },
+    config: {
+      showDays: true,
+      showHours: true,
+      showMinutes: true,
+      showSeconds: true,
+      fontSize: 30,
+      fontFamily: 'Comic Sans MS, cursive',
+      textColor: '#FF6B6B',
+      backgroundColor: '#FFFFFF',
+      padding: 28,
+      borderRadius: 20,
+      animationType: 'bounce',
+      fontWeight: '800',
+      letterSpacing: '0.05em'
+    },
+    style: {
+      borderStyle: 'solid',
+      borderColor: '#FF6B6B',
+      borderWidth: '3px',
+      boxShadow: '0 12px 24px rgba(255, 107, 107, 0.3), 0 0 0 1px rgba(78, 205, 196, 0.2)',
+      background: 'linear-gradient(135deg, #FFFFFF 0%, #FFF5F5 50%, #FFFBEB 100%)',
+      textShadow: '2px 2px 4px rgba(255, 107, 107, 0.3)'
+    }
+  }
 ];
-
 const getTemplates = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
