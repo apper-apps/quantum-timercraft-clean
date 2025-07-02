@@ -44,7 +44,7 @@ const TimerDisplay = ({ config }) => {
     borderRadius: `${config.borderRadius}px`,
   };
 
-const AnimatedNumber = ({ value, animationType }) => {
+const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
     const animationVariants = {
       fade: {
         initial: { opacity: 0 },
@@ -80,6 +80,15 @@ const AnimatedNumber = ({ value, animationType }) => {
 
     const variant = animationVariants[animationType] || animationVariants.fade;
 
+    // If animation is disabled, render static content
+    if (!shouldAnimate) {
+      return (
+        <div className="text-2xl font-bold tabular-nums">
+          {String(value).padStart(2, '0')}
+        </div>
+      );
+    }
+
     return (
       <motion.div
         key={value}
@@ -94,7 +103,7 @@ const AnimatedNumber = ({ value, animationType }) => {
     );
   };
 
-  const TimerUnit = ({ value, label, show, animationType }) => {
+const TimerUnit = ({ value, label, show, animationType }) => {
     if (!show) return null;
     
     return (
@@ -103,7 +112,11 @@ const AnimatedNumber = ({ value, animationType }) => {
         whileHover={{ scale: 1.05 }}
         transition={{ type: 'spring', stiffness: 300 }}
       >
-        <AnimatedNumber value={value} animationType={animationType} />
+        <AnimatedNumber 
+          value={value} 
+          animationType={animationType} 
+          shouldAnimate={show} 
+        />
         <div className="text-xs uppercase tracking-wide opacity-75 mt-1">
           {label}
         </div>
