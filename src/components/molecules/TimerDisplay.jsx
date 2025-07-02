@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-
+import { motion, AnimatePresence } from 'framer-motion';
 // Custom hook to track previous values
 const usePrevious = (value) => {
   const ref = useRef();
@@ -92,11 +91,8 @@ const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
 
     const variant = animationVariants[animationType] || animationVariants.fade;
 
-    // Only animate if the value has actually changed and animation is enabled
-    const shouldShowAnimation = shouldAnimate && hasValueChanged;
-
-    // If no animation should occur, render static content
-    if (!shouldShowAnimation) {
+    // Always animate when shouldAnimate is true - this ensures animations work
+    if (!shouldAnimate) {
       return (
         <div className="text-2xl font-bold tabular-nums">
           {String(value).padStart(2, '0')}
@@ -105,16 +101,18 @@ const AnimatedNumber = ({ value, animationType, shouldAnimate = true }) => {
     }
 
     return (
-      <motion.div
-        key={value}
-        className="text-2xl font-bold tabular-nums"
-        initial={variant.initial}
-        animate={variant.animate}
-        exit={variant.exit}
-        transition={variant.transition}
-      >
-        {String(value).padStart(2, '0')}
-      </motion.div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`${animationType}-${value}`}
+          className="text-2xl font-bold tabular-nums"
+          initial={variant.initial}
+          animate={variant.animate}
+          exit={variant.exit}
+          transition={variant.transition}
+        >
+          {String(value).padStart(2, '0')}
+        </motion.div>
+      </AnimatePresence>
     );
   };
 
