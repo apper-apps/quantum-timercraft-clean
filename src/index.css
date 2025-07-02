@@ -1,0 +1,144 @@
+@import 'react-toastify/dist/ReactToastify.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background-color: #F8F9FA;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  input, textarea, select {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    background: linear-gradient(135deg, #5B4FE9 0%, #8B85F0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .premium-card {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
+    box-shadow: 0 10px 40px -10px rgba(91, 79, 233, 0.1), 0 20px 50px -10px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(139, 133, 240, 0.1);
+  }
+
+  .premium-button {
+    background: linear-gradient(135deg, #5B4FE9 0%, #8B85F0 100%);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(91, 79, 233, 0.3);
+  }
+
+  .premium-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(91, 79, 233, 0.4);
+  }
+
+  .accent-button {
+    background: linear-gradient(135deg, #FF6B6B 0%, #E53E3E 100%);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  }
+
+  .accent-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  }
+
+  .form-input {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(139, 133, 240, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .form-input:focus {
+    border-color: #5B4FE9;
+    box-shadow: 0 0 0 3px rgba(91, 79, 233, 0.1);
+    background: #ffffff;
+  }
+
+  .color-swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .color-swatch:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  }
+
+  .timer-digit {
+    background: linear-gradient(145deg, #ffffff 0%, #f0f2f5 100%);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .code-block {
+    background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 100%);
+    border: 1px solid #404040;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  }
+}
+
+.Toastify__toast-container {
+  z-index: 9999;
+}
+
+.Toastify__toast {
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  min-height: auto;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #F44336 0%, #d32f2f 100%);
+  color: white;
+}
+
+.Toastify__toast--info {
+  background: linear-gradient(135deg, #2196F3 0%, #1976d2 100%);
+  color: white;
+}
+
+.Toastify__progress-bar {
+  background: rgba(255, 255, 255, 0.7);
+}
